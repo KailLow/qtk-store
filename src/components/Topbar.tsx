@@ -27,7 +27,7 @@ export default function Topbar() {
           setCurrentTime(formattedTime);
 
           const currentHour = now.getHours();
-            setIsMorning(currentHour < 12); 
+            setIsMorning((currentHour < 18 && currentHour >= 5) === true); 
         };
         // Update the date and time every second
         const intervalId = setInterval(updateDateTime, 1000);
@@ -37,13 +37,20 @@ export default function Topbar() {
     }, []); // Empty dependency array means this effect will only run once when the component mounts
 
     return (
-        <div className="min-w-full min-h-[60px] bg-slate-50 bg-opacity-50 border align-bottom">
+        <>
             {  isMorning ? (
-                <HiSun className=' text-yellow-300 h-8 w-8'/>
+                <div className="min-w-full min-h-[60px] bg-sky-500 px-5 rounded-lg py-1 border align-bottom">
+                    <HiSun className=' text-yellow-300 h-8 w-8'/>
+                    
+                    <p className=' text-white'>{currentDate} : {currentTime}</p>
+                </div>
                 ) : (
+                    <div className="min-w-full min-h-[60px] bg-gray-700 px-5 rounded-lg py-1 border align-bottom">
                     <HiMoon className=' text-yellow-300 h-8 w-8'/>
+                    
+                    <p className=' text-yellow-200'>{currentDate} : {currentTime}</p>
+                </div>
                 )}
-            <p className=' text-gray-800'>{currentDate} : {currentTime}</p>
-        </div>
+        </>
     )
 }

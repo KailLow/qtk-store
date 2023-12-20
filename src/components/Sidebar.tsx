@@ -7,7 +7,8 @@ import { HiChartPie, HiTicket, HiShoppingBag, HiShoppingCart, HiSupport, HiTable
 
 export default function Sibebar() {
   return (
-    <Sidebar aria-label="Sidebar with content separator example" theme={customSideBarTheme}>
+    <div className=" relative h-full">
+      <Sidebar aria-label="Sidebar with content separator example" theme={customSideBarTheme}>
       <Sidebar.Logo href="#" img="./favicon.ico" imgAlt="Flowbite logo">
         QTK Store
       </Sidebar.Logo>
@@ -53,6 +54,7 @@ export default function Sibebar() {
         </Sidebar.ItemGroup>
       </Sidebar.Items>
     </Sidebar>
+    </div>
   );
 }
 

@@ -6,26 +6,29 @@ import Topbar from "@/components/Topbar";
 import { Button } from "flowbite-react";
 import { HiPlus } from 'react-icons/hi';
 import React, { useState } from "react";
+import CustomerFormModal from "@/components/CustomerForm/CustomerFormModal";
+import { title } from "process";
+import AddressSelect from "@/components/AddressSelect/AddressSelect";
 //import CustomerForm from "@/components/CustomerForm/CustomerForm";
 
 export default function Customer() {
 
-    const [isFormVisible, setFormVisible] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
 
     const handleButtonClick = () => {
-        setFormVisible(true);
+        setOpenModal(true);
       };
     
       const handleCloseForm = () => {
-        setFormVisible(false);
+        setOpenModal(false);
       };
 
+      const columns = ['ID', 'Name', 'Age'];
     return (
-        <main className="flex min-h-screen max-w-screen">
-            <Sibebar />
+        <main className="min-h-screen max-w-screen">
             <div className=" flex-col w-full">
                 <Topbar />
-                <div className=" flex w-full justify-around m-1">
+                <div className=" flex w-full m-1 justify-between mx-3">
                     <SearchInput />
                     
                     <Button onClick={handleButtonClick} className=" bg-primary rounded shadow-xl">
@@ -33,6 +36,9 @@ export default function Customer() {
                         Add Customer
                     </Button>
                 </div>
+                
+                <CustomerFormModal openModal={openModal} onCloseModal={handleCloseForm}/>
+                
             </div>
         </main>
     )
