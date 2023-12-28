@@ -1,8 +1,88 @@
+"use client";
 import Head from "next/head";
 import Image from "next/image";
 
+import { useContext, useState } from "react";
+import Error from "next/error";
+import { publicFetcher } from "@/hooks/usePublicRoute";
+import TokenContext from "../contexts/TokenContext";
+import { useRouter } from 'next/navigation';
+
 
 export default function SignIn() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [err, setErr] = useState('');
+    const [emailError, setEmailError] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
+    
+    const { setToken } = useContext(TokenContext);
+    const router = useRouter();
+
+    const handleLogin = async () => {
+        if (!validateEmail(email) && !validatePassword(password)) {
+            setEmailError(true);
+            setEmail('');
+            setPasswordError(true);
+            setPassword('');
+            return;
+        }
+        else if (!validateEmail(email)) {
+            setPasswordError(false);
+            setPassword('');
+            setEmailError(true);
+            setEmail('');
+            return;
+        }
+        else if (!validatePassword(password)) {
+            setEmailError(false);
+            setPasswordError(true);
+            setPassword('');
+            return;
+        }
+        else {
+            setEmailError(false);
+            setPasswordError(false);
+
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify({
+                "email": "admin@gmail.com",
+                "password": "password1"
+            });
+
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw
+            };
+
+            const res = fetch("http://103.57.221.113:3000/v1//auth/login", requestOptions);
+            
+            if ((await res).status == 200){
+                const token = await (await res).json();
+                setToken({
+                    accessToken: token.access_token,
+                    refreshToken: token.refresh_token,
+            });
+                router.push("/sales");
+            }
+
+        return;
+    }
+}
+
+    const validateEmail = (email: string): boolean => {
+        const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+        return emailRegex.test(email);
+    };
+
+    const validatePassword = (password: string): boolean => {
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        return passwordRegex.test(password);
+    };
+
     return (
         <div
             className=" flex flex-row w-4/5 h-screen place-items-centern items-center mx-auto"
@@ -28,19 +108,30 @@ export default function SignIn() {
                 <form>
                     <label htmlFor="username" 
                         className=" text-secondary text-sm"
-                    >Username: </label><br/>
+                    >Email: </label><br/>
                         <input 
                             className="w-[297px] h-[40px] rounded-[4px] border-solid border-[1px] border-primary outline-secondary mb-3"
-                            name="username" type="text" placeholder="username" 
+                            name="email" type="text" placeholder="Example@example.com" 
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                            required
+                            pattern="^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$"
                         />
+                        
+                        {emailError && <p className=" text-red-600 text-xs">*Invalid email address</p>}
                         <br/>
                     <label htmlFor="password" 
                         className=" text-secondary text-sm"
                     >Password: </label><br/>
                         <input 
                             className="w-[297px] h-[40px] rounded-[4px] border-solid border-[1px] border-primary outline-secondary mb-3"
-                            name="password" type="password" placeholder="password   " 
+                            name="password" type="password" placeholder="password" 
+                            value={password}
+                            required
+                            pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                            onChange={e => setPassword(e.target.value)}
                         />
+                        {passwordError && <p className=" text-red-600 text-xs">*Invalid password. Password must be at least 8 characters long and contain only letters and numbers.</p>}
                         <br/>
                         <input type="checkbox" id="rememberSignIn" name="rememberSignIn"/>
                         <label htmlFor="rememberSignIn"
@@ -48,7 +139,7 @@ export default function SignIn() {
                         > Ghi nho</label><br/>
                         <button 
                             className=" text-white bg-primary w-36 h-10 rounded text-[15px] border border-primary font-[500] hover:text-primary hover:bg-white mt-3"
-                            name="signIn" id="signIn" type="button"
+                            name="signIn" id="signIn" type="button"onClick={handleLogin}
                         >Sign In</button>
                 </form>
             </div>
