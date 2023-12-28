@@ -14,7 +14,7 @@ export default function Sibebar() {
       </Sidebar.Logo>
       <Sidebar.Items>
         <Sidebar.ItemGroup>
-            <Sidebar.Item href="#" icon={HiShoppingCart}>
+            <Sidebar.Item href="/sales" icon={HiShoppingCart}>
                 Bán hàng
             </Sidebar.Item>
         </Sidebar.ItemGroup>

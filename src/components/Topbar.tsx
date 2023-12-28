@@ -13,7 +13,7 @@ const options = {
     hour12: false
 };
 
-export default function Topbar() {
+export default function Topbar({title}:any) {
     const [currentDate, setCurrentDate] = useState<string>('');
     const [currentTime, setCurrentTime] = useState<string>('');
     const [isMorning, setIsMorning] = useState<boolean>(true);
@@ -38,19 +38,25 @@ export default function Topbar() {
 
     return (
         <>
-            {  isMorning ? (
-                <div className="min-w-full min-h-[60px] bg-sky-500 px-5 rounded-lg py-1 border align-bottom">
-                    <HiSun className=' text-yellow-300 h-8 w-8'/>
-                    
-                    <p className=' text-white'>{currentDate} : {currentTime}</p>
+            {isMorning ? (
+                <div className=' flex min-w-full justify-between items-center bg-sky-500 px-5 rounded-lg py-1 border '>
+                    <div className=" min-h-[60px] align-bottom">
+                        <HiSun className=' text-yellow-300 h-8 w-8' />
+
+                        <p className=' text-white'>{currentDate} : {currentTime}</p>
+                    </div>
+                    <h1 className=' text-white text-3xl font-semibold'>{title}</h1>
                 </div>
-                ) : (
-                    <div className="min-w-full min-h-[60px] bg-gray-700 px-5 rounded-lg py-1 border align-bottom">
-                    <HiMoon className=' text-yellow-300 h-8 w-8'/>
-                    
-                    <p className=' text-yellow-200'>{currentDate} : {currentTime}</p>
+            ) : (
+                <div className=' flex min-w-full justify-between items-center bg-gray-700 px-5 rounded-lg py-1 border '>
+                    <div className="min-h-[60px] align-bottom">
+                        <HiMoon className=' text-yellow-300 h-8 w-8' />
+
+                        <p className=' text-yellow-200'>{currentDate} : {currentTime}</p>
+                    </div>
+                    <h1 className=' text-yellow-200 text-3xl font-semibold'>{title}</h1>
                 </div>
-                )}
+            )}
         </>
     )
 }

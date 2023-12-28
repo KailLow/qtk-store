@@ -6,9 +6,11 @@ import { HiMail, HiSearch } from 'react-icons/hi';
 
 export default function SearchInput() {
   return (
-    <div className=" w-1/3 min-h-fit min-w-fit drop-shadow-lg justify-items-start">
-      <TextInput id="email4" type="Search" rightIcon={HiSearch} placeholder="Search" required theme={customSearchInputTheme} />
-    </div>
+    <>
+      <div className=" w-1/3 min-h-fit min-w-fit drop-shadow-lg justify-items-start">
+        <TextInput id="email4" type="Search" rightIcon={HiSearch} placeholder="Search" required theme={customSearchInputTheme} />
+      </div>
+    </>
   );
 }
 

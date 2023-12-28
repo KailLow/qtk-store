@@ -37,6 +37,9 @@ export default function CustomerForm(){
                 <TextInput id="phone" type='email' placeholder='+84 385882079' required />
             </div>
         </div>
+        <div className="mb-2 block px-3">
+            <Label htmlFor="address1" value="Address" />
+        </div>
         <AddressSelect/>
     </div>
     )
