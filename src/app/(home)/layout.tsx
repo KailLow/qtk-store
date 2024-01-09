@@ -10,7 +10,7 @@ export default function RootLayout({
     return(
         <div className=" w-screen h-screen flex">
             <Sidebar/>
-            <div className=" pt-8 px-5 pr-8 w-full bg-background-normal">
+            <div className=" w-full bg-background-normal">
                 {children}
             </div>
         </div>
