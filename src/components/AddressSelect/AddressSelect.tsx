@@ -5,7 +5,10 @@ import axios from 'axios';
 import { Label, Select } from 'flowbite-react';
 
 
-const AddressSelect: React.FC = () => {
+function AddressSelect({
+  setProvince = () => {}, 
+  setDistrict = () => {}, 
+  setWard = () => {}} : any){
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
@@ -28,14 +31,25 @@ const AddressSelect: React.FC = () => {
   const callApiDistrict = (api: string) => {
     axios.get(api).then((response) => {
       setDistricts(response.data.districts);
+      console.log(response.data.name);
+      setProvince(response.data.name)
     });
   };
 
   const callApiWard = (api: string) => {
     axios.get(api).then((response) => {
       setWards(response.data.wards);
+      console.log(response.data.name)
+      setDistrict(response.data.name);
     });
   };
+
+  const callNameWard = (api: string) => {
+    axios.get(api).then((response) => {
+      setWard(response.data.name);
+      console.log(response.data.name);
+    })
+  }
 
   const handleCityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const cityCode = event.target.value;
@@ -45,6 +59,8 @@ const AddressSelect: React.FC = () => {
     if (cityCode) {
       callApiDistrict(`${host}p/${cityCode}?depth=2`);
     }
+
+    console.log('');
   };
 
   const handleDistrictChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -54,10 +70,16 @@ const AddressSelect: React.FC = () => {
     if (districtCode) {
       callApiWard(`${host}d/${districtCode}?depth=2`);
     }
+    //console.log(districts);
   };
 
   const handleWardChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedWard(event.target.value);
+    const wardCode = event.target.value;
+    if (wardCode) {
+      callNameWard(`${host}w/${wardCode}?depth=2`);
+    }
+    setWard(event.target.value);
   };
 
   return (
