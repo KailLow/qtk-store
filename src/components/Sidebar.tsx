@@ -25,8 +25,8 @@ export default function Sibebar() {
           <Sidebar.Item href="/customers" icon={HiUser}>
             Customer Managemment
           </Sidebar.Item>
-          <Sidebar.Item href="#" icon={FaProductHunt}>
-            Quản lý san pham
+          <Sidebar.Item href="/product" icon={FaProductHunt}>
+            Product Management
           </Sidebar.Item>
           <Sidebar.Item href="/category" icon={FaProductHunt}>
             Category Management
