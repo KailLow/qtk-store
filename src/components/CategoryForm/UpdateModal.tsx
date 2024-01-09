@@ -4,20 +4,18 @@
 import { Button, CustomFlowbiteTheme, Modal } from 'flowbite-react';
 import { useContext, useState } from 'react';
 import TokenContext from "../../contexts/TokenContext";
-import CustomerForm from './CustomerForm';
+import UpdateCategoryForm from './UpdateForm';
 
 
 
-export default function CustomerFormModal({ openModal, onCloseModal }: any) {
-
-  
+export default function UpdateCategoryFormModal({ openModal, onCloseModal, categoryID, categoryName }: any) {
 
   return (
     <>
-      <Modal size="4xl" position="center" className='' dismissible show={openModal} onClose={onCloseModal} theme={customCustomerFormTheme}>
-        <Modal.Header>Add Customer Form</Modal.Header>
+      <Modal size="xl" position="center" className=' h-fit' dismissible show={openModal} onClose={onCloseModal} theme={customCustomerFormTheme}>
+        <Modal.Header>Update Category Form</Modal.Header>
         <Modal.Body>
-          <CustomerForm onCloseModal={onCloseModal} />
+          <UpdateCategoryForm onCloseModal={onCloseModal} categoryID={categoryID} categoryName={categoryName} />
         </Modal.Body>
       </Modal>
     </>

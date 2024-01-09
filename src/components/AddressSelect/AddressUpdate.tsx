@@ -5,10 +5,11 @@ import axios from 'axios';
 import { Label, Select } from 'flowbite-react';
 
 
-function AddressSelect({
+function AddressUpdate({
   setProvince = () => {}, 
   setDistrict = () => {}, 
-  setWard = () => {}} : any){
+  setWard = () => {},
+  address} : any){
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
@@ -20,6 +21,7 @@ function AddressSelect({
 
   useEffect(() => {
     callAPI(`${host}p?depth=2`);
+    console.log(address);
   }, []);
 
   const callAPI = (api: string) => {
@@ -85,7 +87,7 @@ function AddressSelect({
   return (
     <div className=' flex justify-between pl-3'>
       <Select className=' my-1 w-60' id="city" value={selectedCity} onChange={handleCityChange}>
-        <option value="" disabled>
+        <option value={selectedCity} disabled>
           Chọn tỉnh thành
         </option>
         {cities.map((city: any) => (
@@ -96,7 +98,7 @@ function AddressSelect({
       </Select>
 
       <Select className=' my-1 w-60' id="district" value={selectedDistrict} onChange={handleDistrictChange}>
-        <option value="" disabled>
+        <option value={selectedDistrict} disabled>
           Chọn quận huyện
         </option>
         {districts.map((district: any) => (
@@ -107,7 +109,7 @@ function AddressSelect({
       </Select>
 
       <Select className=' my-1 w-60' id="ward" value={selectedWard} onChange={handleWardChange}>
-        <option value="" disabled>
+        <option value={selectedCity} disabled>
           Chọn phường xã
         </option>
         {wards.map((ward: any) => (
@@ -120,4 +122,4 @@ function AddressSelect({
   );
 };
 
-export default AddressSelect;
+export default AddressUpdate;

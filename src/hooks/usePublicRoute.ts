@@ -1,3 +1,5 @@
+import useSWR from "swr";
+
 export async function publicFetcher(
 	url: string,
 	method: "GET" | "POST" | "PUT" | "DELETE",
@@ -9,9 +11,19 @@ export async function publicFetcher(
 			"Content-type": "application/json",
 		},
 		body: JSON.stringify(body),
-	}).then(response => response.text())
-    .then(result => console.log(result))
-    .catch(error => console.log('error', error)); ;
+	});
 
 	return res;
+}
+
+export default function usePublicRoute(
+	url: string,
+	method: "GET" | "POST" | "PUT" | "DELETE",
+	body: any
+) {
+	const { data, error, isLoading } = useSWR(url, () =>
+		publicFetcher(url, method, body)
+	);
+
+	return { data, error, isLoading };
 }

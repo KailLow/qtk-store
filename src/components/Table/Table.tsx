@@ -49,7 +49,7 @@ export default function DataTable<T extends Object & BaseEntity>({
                         {data.map((row, index) => (
                             <Table.Row
                                 key={row.id}
-                                className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                                className="bg-white dark:border-gray-700 dark:bg-gray-800 border-1 border-primary"
                                 onClick={() => onClickRow(row)}
                             >
                                 <Table.Cell
@@ -123,7 +123,7 @@ export default function DataTable<T extends Object & BaseEntity>({
                                                     icon: " text-red-600 mr-2 h-4 w-4",
                                                 }}
                                                 icon={HiTrash}
-                                                onClick={() => onDelete(row)}
+                                                onClick={() => {onDelete(row); console.log(row.id)}}
                                             >
                                                 <p className=" text-red-600">
                                                     Delete
@@ -144,14 +144,14 @@ export default function DataTable<T extends Object & BaseEntity>({
 
 const tableTheme: CustomFlowbiteTheme["table"] = {
     root: {
-        base: "w-full text-left rounded-lg text-sm text-secondary-500",
+        base: "w-full text-left rounded-lg text-sm text-secondary-500 mb-3",
         shadow: "absolute bg-white dark:bg-black w-full h-full top-0 left-0 rounded-lg drop-shadow-md -z-10",
-        wrapper: "relative rounded-lg border-[1px] border-secondary-200",
+        wrapper: "relative rounded-lg border-[3px] border-secondary-200",
     },
     body: {
         base: "group/body",
         cell: {
-            base: `group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg px-4 py-4 font-semibold text-secondary-900`,
+            base: `group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg px-4 py-1 font-semibold text-secondary-900`,
         },
     },
     head: {
