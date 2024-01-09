@@ -5,8 +5,9 @@ import Image from "next/image";
 import { useContext, useState } from "react";
 import Error from "next/error";
 import { publicFetcher } from "@/hooks/usePublicRoute";
-import TokenContext from "../contexts/TokenContext";
+import TokenContext from "../../contexts/TokenContext";
 import { useRouter } from 'next/navigation';
+import API from "@/constants/apiEndpoint";
 
 
 export default function SignIn() {
@@ -44,29 +45,24 @@ export default function SignIn() {
             setEmailError(false);
             setPasswordError(false);
 
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-
-            var raw = JSON.stringify({
-                "email": "admin@gmail.com",
-                "password": "password1"
+            const res = await publicFetcher(API.authentication.signIn, "POST", {
+                email,
+                password,
             });
 
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw
-            };
-
-            const res = fetch("http://103.57.221.113:3000/v1//auth/login", requestOptions);
-            
-            if ((await res).status == 200){
-                const token = await (await res).json();
+            if (res.status == 200) {
+                const token = await res.json();
                 setToken({
-                    accessToken: token.access_token,
-                    refreshToken: token.refresh_token,
-            });
+                    accessToken: token.tokens.access.token,
+                    refreshToken: token.tokens.refresh.token,
+                })
+                localStorage.setItem("token", token.tokens.access.token);
+                localStorage.setItem("refresh", token.tokens.refresh.token);
                 router.push("/sales");
+            } else {
+                setEmail('');
+                setPassword('');
+                setErr('Email or password is invalid');
             }
 
         return;
@@ -74,7 +70,7 @@ export default function SignIn() {
 }
 
     const validateEmail = (email: string): boolean => {
-        const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+        const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,5})+$/;
         return emailRegex.test(email);
     };
 

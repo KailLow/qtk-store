@@ -4,20 +4,20 @@
 import { Button, CustomFlowbiteTheme, Modal } from 'flowbite-react';
 import { useContext, useState } from 'react';
 import TokenContext from "../../contexts/TokenContext";
-import CustomerForm from './CustomerForm';
+import SupplierForm from './SupplierForm';
 
 
 
-export default function CustomerFormModal({ openModal, onCloseModal }: any) {
+export default function SupplierFormModal({ openModal, onCloseModal }: any) {
 
   
 
   return (
     <>
       <Modal size="4xl" position="center" className='' dismissible show={openModal} onClose={onCloseModal} theme={customCustomerFormTheme}>
-        <Modal.Header>Add Customer Form</Modal.Header>
+        <Modal.Header>Add Supplier Form</Modal.Header>
         <Modal.Body>
-          <CustomerForm onCloseModal={onCloseModal} />
+          <SupplierForm onCloseModal={onCloseModal} />
         </Modal.Body>
       </Modal>
     </>

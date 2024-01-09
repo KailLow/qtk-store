@@ -19,14 +19,17 @@ export default function Sibebar() {
             </Sidebar.Item>
         </Sidebar.ItemGroup>
         <Sidebar.ItemGroup>
-          <Sidebar.Item href="#" icon={HiIdentification} theme={customSideBarTheme?.item}>
+          <Sidebar.Item href="/staff" icon={HiIdentification} theme={customSideBarTheme?.item}>
             Quản lý nhân viên
           </Sidebar.Item>
           <Sidebar.Item href="/customers" icon={HiUser}>
-            Quản lý khách hàng
+            Customer Managemment
           </Sidebar.Item>
           <Sidebar.Item href="#" icon={FaProductHunt}>
             Quản lý san pham
+          </Sidebar.Item>
+          <Sidebar.Item href="/category" icon={FaProductHunt}>
+            Category Management
           </Sidebar.Item>
           <Sidebar.Item href="#" icon={HiTicket}>
             CTKM
@@ -43,13 +46,16 @@ export default function Sibebar() {
           <Sidebar.Item href="#" icon={HiTable}>
             Quản lý đơn hàng
           </Sidebar.Item>
+          <Sidebar.Item href="/supplier" icon={FaStore}>
+            Supplier Management
+          </Sidebar.Item>
         </Sidebar.ItemGroup>
         <Sidebar.ItemGroup>
           <Sidebar.Item href="#" icon={HiChartPie}>
             Thống kê
           </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiSupport}>
-            Cài đặt
+          <Sidebar.Item href="/signin" icon={HiSupport}>
+            Sign Out
           </Sidebar.Item>
         </Sidebar.ItemGroup>
       </Sidebar.Items>
