@@ -74,14 +74,16 @@ export default function ProductForm({ onCloseModal }: any) {
 
       if (res.status == 401)
         console.log("aaaaaa");
-      const supplierList = res.data.results as Supplier[];
+      const supplierList = res.data.results;
       console.log(supplierList);
-      const newArr = supplierList.map((data) =>
+      const newArr = supplierList.map((data: { name: string; phone: string; email: string; address: { province: string; district: string; ward: string; }; taxIdentificationNumber: string; id: string; }) =>
                 createSupplier(
                     data.name,
                     data.phone,
                     data.email,
-                    data.address,
+                    data.address.province,
+                    data.address.district,
+                    data.address.ward,
                     data.taxIdentificationNumber,
                     data.id
                 )
@@ -176,7 +178,7 @@ export default function ProductForm({ onCloseModal }: any) {
           <TextInput id="unit" type='text' value={unit} onChange={(e: any) => setUnit(e.target.value)} required />
         </div>
       </div>
-      {/* <ImageInput /> */}
+      <ImageInput />
       <div className=' flex justify-end w-full mt-7'>
         <Button className=' mx-3' onClick={onCreateProduct}>Create</Button>
         <Button className=' mx-3' color='red' onClick={onCloseModal}>Cancel</Button>

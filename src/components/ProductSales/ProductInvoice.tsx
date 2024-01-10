@@ -4,7 +4,7 @@ import { Button } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { HiMinus, HiPlus } from "react-icons/hi";
 
-export default function ProductInvoice({data, updateTotal, }:any){
+export default function ProductInvoice({data, }:any){
     const [qty, setQty] = useState(1);
     const [value, setValue] = useState(data.price);
 
@@ -34,14 +34,14 @@ export default function ProductInvoice({data, updateTotal, }:any){
         <>
             <div className=" flex justify-between items-center ml-1 mb-2">
                 <div>
-                    <p>{data.product_name}</p>
+                    <p>{data.name}</p>
                     <div className=" flex mt-1">
                         <Button color="failure" className=" w-7 h-7 rounded-none" onClick={setMinus}><HiMinus  className="h-4 w-4" /></Button>
                             <input className=" w-16 h-7" type="number" value={qty} />
                         <Button className=" w-7 h-7 rounded-none" onClick={setPlus}><HiPlus className=" h-4 w-4"/></Button>
                     </div>
                 </div>
-                <p>{value}</p>
+                <p>{value * qty}</p>
             </div>
         </>
     )

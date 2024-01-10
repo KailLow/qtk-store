@@ -10,7 +10,7 @@ interface Supplier {
     [x: string]: any;
 }
 
-interface Quantity {
+export interface Quantity {
     imported: number;
     inStock: number;
     sold: number;

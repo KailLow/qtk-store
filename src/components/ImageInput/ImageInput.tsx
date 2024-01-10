@@ -1,89 +1,50 @@
-"use client";
-import { useState, useEffect } from "react";
-import axios from "axios";
-import FormData from "form-data"
-import fs from 'fs';
+import { useState } from 'react';
 
-
-function ImageInput() {
-  const [image, setImage] = useState([]);
-  const [imagePreviews, setImagePreviews] = useState([]);
-
+const ImageInput: React.FC = () => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const tokenStr = localStorage.getItem("token") || "";
 
-  // multiple image input change
-  const handleMultipleImage = (event: any) => {
-    const files = [...event.target.files];
-    setImage(files);
-
-    const previews = [];
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        previews.push(reader.result);
-        if (previews.length === files.length) {
-          setImagePreviews(previews);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    setSelectedFile(file);
   };
 
-  // multile image upload
-  const miltipleImageUpload = async (e) => {
-    e.preventDefault();
+  const handleUpload = async () => {
+    if (selectedFile) {
+      const url = 'http://103.57.221.113:3000/v1//upload';
+      const token = tokenStr;
 
-    let formData = new FormData();
+      const myHeaders = new Headers();
+      myHeaders.append('Authorization', `Bearer ${token}`);
 
-    Array.from(image).forEach((item) => {
-      formData.append("images", item);
-    });
-    let data = new FormData();
-    data.append('file', fs.createReadStream('postman-cloud:///1eeaf183-3666-4ad0-98f8-fbe01cf3c5d6'));
+      const formdata = new FormData();
+      formdata.append('file', selectedFile, selectedFile.name);
 
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: 'http://103.57.221.113:3000/v1//upload',
-      headers: {
-        'Authorization': 'Bearer ' + tokenStr,
-        ...data.getHeaders()
-      },
-      data: data
-    };
+      const requestOptions: RequestInit = {
+        method: 'POST',
+        headers: myHeaders,
+        body: formdata,
+        redirect: 'follow',
+      };
 
-    axios.request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      try {
+        const response = await fetch(url, requestOptions);
+        const result = await response.text();
+        console.log(result);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    } else {
+      console.error('No file selected.');
+    }
   };
 
   return (
-    <>
-      <div className="upload">
-        <h2>Upload Image</h2>
-
-        <div>
-          {imagePreviews?.map((preview, index) => (
-            <img
-              key={index}
-              src={preview}
-              alt={`Preview ${index}`}
-              style={{ width: "200px", height: "auto" }}
-            />
-          ))}
-        </div>
-
-        <form onSubmit={(e) => miltipleImageUpload(e)}>
-          <input type="file" multiple onChange={(e) => handleMultipleImage(e)} />
-          <button className="uploadBtn">Upload</button>
-        </form>
-      </div>
-    </>
+    <div>
+      <input type="file" onChange={handleFileChange} />
+      <button onClick={handleUpload}>Upload</button>
+    </div>
   );
-}
+};
 
 export default ImageInput;

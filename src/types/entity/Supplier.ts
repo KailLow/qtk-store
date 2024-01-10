@@ -6,7 +6,10 @@ export default interface Supplier extends BaseEntity {
     name: string;
     phone: string;
     email: string;
-    address: Address;
+    province: string;
+    district: string;
+    ward: string;
+    address: string;
     taxIdentificationNumber: string;
 }
 
@@ -14,14 +17,20 @@ export function createSupplier(
     name: string,
     phone: string,
     email: string,
-    address: Address,
+    province: string,
+    district: string,
+    ward: string,
     taxIdentificationNumber: string,
     id: string
   ): Supplier {
+    const address = ward + ", " + district + ", " + province;
     const supplier: Supplier = {
         name,
         phone,
         email,
+        province,
+        district,
+        ward,
         address,
         taxIdentificationNumber,
         id

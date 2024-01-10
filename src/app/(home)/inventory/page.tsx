@@ -2,25 +2,24 @@
 
 import SearchInput from "@/components/SearchInput";
 import Topbar from "@/components/Topbar";
-import { Button, Select } from "flowbite-react";
-import { HiPlus, HiFilter } from 'react-icons/hi';
+import { Button } from "flowbite-react";
+import { HiPlus } from 'react-icons/hi';
 import React, { useEffect, useState } from "react";
-import ProductFormModal from "@/components/ProductForm/ProductFormModal";
+import ImportProductModal from "@/components/InventoryForm/ImportProductModal";
 import axios from 'axios';
 import DataTable from "@/components/Table/Table";
 import { useRouter } from 'next/navigation';
 import API from "@/constants/apiEndpoint";
 import { useClaimModal } from "@/components/ClaimModal/ClaimModal";
-import Product, { Quantity, createProduct } from "@/types/entity/Product";
+import Category, { createCategory } from "@/types/entity/Category";
 import PaginationCustom from '@/components/Pagination/Pagination'
 import { error } from "console";
 import UpdateCategoryFormModal from "@/components/CategoryForm/UpdateModal";
-import Category from "@/types/entity/Category";
-import Supplier from "@/types/entity/Supplier";
+import Inventory, { createInventory } from "@/types/entity/Inventory";
 //import CustomerForm from "@/components/CustomerForm/CustomerForm";
 
-export default function Product() {
-    const [product, setProduct] = useState<Product[]>([]);
+export default function Inventories() {
+    const [category, setCategory] = useState<Inventory[]>([]);
     //const tokenStr = localStorage.getItem("token") || "";
     let tmp;
     const [number, setNumber] = useState(1);
@@ -30,12 +29,11 @@ export default function Product() {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [categoryId, setCategoryId] = useState('');
     const [categoryName, setCategoryName] = useState('');
-    const [sort, setSort] = useState('name');
 
     const onPageChange = (page: number) => {
         setCurrentPage(page);
         console.log(page);
-        fectchData();
+        fetchData();
     }
 
     const handleButtonClick = () => {
@@ -45,7 +43,7 @@ export default function Product() {
     const handleCloseForm = () => {
         setOpenModal(false);
         setOpenUdateModal(false);
-        fectchData();
+        fetchData();
     };
 
     const onDelete = async (id: string) => {
@@ -53,7 +51,7 @@ export default function Product() {
         let config = {
             method: 'delete',
             maxBodyLength: Infinity,
-            url: `${API.authentication.category}/${id}`,
+            url: `${API.authentication.inventory}/import-products`,
             headers: {
                 Authorization: "Bearer " + tokenStr,
             }
@@ -62,16 +60,16 @@ export default function Product() {
         const res = await axios.request(config);
         console.log("delete" + res);
 
-        fectchData();
+        fetchData();
         return;
     }
 
-    const fectchData = async () => {
+    const fetchData = async () => {
         const tokenStr = localStorage.getItem("token") || "";
         let config = {
             method: "get",
             maxBodyLength: Infinity,
-            url: `${API.authentication.product}?limit=10&page=${currentPage}&sortBy=${sort}`,
+            url: `${API.authentication.inventory}/import-products`,
             headers: {
                 Authorization: "Bearer " + tokenStr,
             },
@@ -83,60 +81,46 @@ export default function Product() {
 
             if (res.status == 401)
                 console.log("aaaaaa");
-            const products = res.data.results;
+            const category = res.data.results;
             setNumber(res.data.totalPages);
-            console.log(products);
-            const newProduct = products.map((data : { name: string, id: string, description: string, unit: string, images: string, price: number, categories: Category, supplier: Supplier, quantity: Quantity}) =>
-            createProduct(
-                data.name,
-                data.id,
-                data.description,
-                data.unit,
-                data.images,
-                data.price,
-                data.categories,
-                data.supplier,
-                data.quantity
+            const newCategory = category.map((data: { name: string; id: string; status: string; products: { expiryDate: string; }[]; totalImportPrice: number | undefined; }) =>
+                createInventory(
+                    data.name,
+                    data.id,
+                    data.status,
+                    data.products,
+                    data.products[0].expiryDate,
+                    data.totalImportPrice
                 )
             );
 
-            setProduct(newProduct);
-            console.log(newProduct)
-            return products;
+            setCategory(newCategory);
+            return category;
         } catch (error) {
             console.log(error);
         }
     };
 
     useEffect(() => {
-        fectchData();
+        fetchData();
     }, [])
     return (
         <main className="min-h-screen max-w-screen pt-2 px-4">
             <div className=" flex-col w-full">
-                <Topbar title="Product" />
+                <Topbar title="Category" />
                 <div className=" flex w-full my-2 justify-between">
                     <SearchInput />
-                    <Select icon={HiFilter} onChange={(e) => {
-                        setSort((e.target.value).toLowerCase());
-                        fectchData();
-                        }} 
-                        required
-                    >
-                        <option>Name</option>
-                        <option>Price</option>
-                        <option>Supplier</option>
-                        <option>Category</option>
-                    </Select>
+
                     <Button onClick={handleButtonClick} className=" bg-primary rounded shadow-xl">
                         <HiPlus className="mr-2 h-5 w-5" />
-                        Add Product
+                        Import Product
                     </Button>
                 </div>
 
-                <ProductFormModal openModal={openModal} onCloseModal={handleCloseForm} />
+                <ImportProductModal openModal={openModal} onCloseModal={handleCloseForm} />
+                <UpdateCategoryFormModal openModal={openUpdateModal} onCloseModal={handleCloseForm} categoryName={categoryName} categoryID={categoryId} />
                 <DataTable
-                    data={product || []}
+                    data={category || []}
                     isLoading={false}
                     onDelete={(category) => {
                         const confirmation = window.confirm("Bạn có chắc chắn muốn xóa nhà cung cấp này?");
@@ -151,18 +135,9 @@ export default function Product() {
                         setOpenUdateModal(true);
                     }}
                     pick={{
-                        name: { title: "Name" },
-                        price: { 
-                            title: "Price",
-                            className: " font-normal text-secondary-500"
-                        },
-                        unit: {
-                            title: "Unit",
-                            className: " font-normal text-secondary-500"
-                        },
-                        description: { title: "Description"},
-                        supplier: {title: "Supplier"},
-                        category: {title: "Category"}
+                        totalImportPrice: { title: "Total Price" },
+                        status: { title: "Status"},
+                        expiryDate: {title: "Date"}
                     }}
                 />
                 <PaginationCustom number={number} currentPage={currentPage} onPageChange={onPageChange} />

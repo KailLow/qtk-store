@@ -15,12 +15,12 @@ export default function Sibebar() {
       <Sidebar.Items>
         <Sidebar.ItemGroup>
             <Sidebar.Item href="/sales" icon={HiShoppingCart}>
-                Bán hàng
+                Sales
             </Sidebar.Item>
         </Sidebar.ItemGroup>
         <Sidebar.ItemGroup>
           <Sidebar.Item href="/staff" icon={HiIdentification} theme={customSideBarTheme?.item}>
-            Quản lý nhân viên
+            User Management
           </Sidebar.Item>
           <Sidebar.Item href="/customers" icon={HiUser}>
             Customer Managemment
@@ -31,29 +31,20 @@ export default function Sibebar() {
           <Sidebar.Item href="/category" icon={FaProductHunt}>
             Category Management
           </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiTicket}>
-            CTKM
-          </Sidebar.Item>
           <Sidebar.Item href="#" icon={FaFileInvoice}>
             Hóa đơn
           </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiShoppingBag}>
-            Nhập hàng
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={FaStore}>
-            Quản lý kho
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiTable}>
-            Quản lý đơn hàng
+          <Sidebar.Item href="/inventory" icon={HiShoppingBag}>
+            Inventory
           </Sidebar.Item>
           <Sidebar.Item href="/supplier" icon={FaStore}>
             Supplier Management
           </Sidebar.Item>
         </Sidebar.ItemGroup>
         <Sidebar.ItemGroup>
-          <Sidebar.Item href="#" icon={HiChartPie}>
-            Thống kê
-          </Sidebar.Item>
+          {/* <Sidebar.Item href="/report" icon={HiChartPie}>
+            Report
+          </Sidebar.Item> */}
           <Sidebar.Item href="/signin" icon={HiSupport}>
             Sign Out
           </Sidebar.Item>

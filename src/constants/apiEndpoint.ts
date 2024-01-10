@@ -8,6 +8,8 @@ const API = {
         supplier: `${BASE_API}/suppliers`,
         category: `${BASE_API}/categories`,
         product: `${BASE_API}/products`,
+        users: `${BASE_API}/users/`,
+        inventory: `${BASE_API}/inventories`,
     },
 };
 

@@ -129,10 +129,10 @@ export default function SignIn() {
                         />
                         {passwordError && <p className=" text-red-600 text-xs">*Invalid password. Password must be at least 8 characters long and contain only letters and numbers.</p>}
                         <br/>
-                        <input type="checkbox" id="rememberSignIn" name="rememberSignIn"/>
-                        <label htmlFor="rememberSignIn"
+                        {/* <input type="checkbox" id="rememberSignIn" name="rememberSignIn"/> */}
+                        {/* <label htmlFor="rememberSignIn"
                             className=" text-text font-400"
-                        > Ghi nho</label><br/>
+                        > Ghi nho</label><br/> */}
                         <button 
                             className=" text-white bg-primary w-36 h-10 rounded text-[15px] border border-primary font-[500] hover:text-primary hover:bg-white mt-3"
                             name="signIn" id="signIn" type="button"onClick={handleLogin}

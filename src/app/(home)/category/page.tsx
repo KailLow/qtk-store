@@ -32,7 +32,7 @@ export default function Category() {
     const onPageChange = (page: number) => {
         setCurrentPage(page);
         console.log(page);
-        fectchData();
+        fetchData();
     }
 
     const handleButtonClick = () => {
@@ -42,7 +42,7 @@ export default function Category() {
     const handleCloseForm = () => {
         setOpenModal(false);
         setOpenUdateModal(false);
-        fectchData();
+        fetchData();
     };
 
     const onDelete = async (id: string) => {
@@ -59,11 +59,11 @@ export default function Category() {
         const res = await axios.request(config);
         console.log("delete" + res);
 
-        fectchData();
+        fetchData();
         return;
     }
 
-    const fectchData = async () => {
+    const fetchData = async () => {
         const tokenStr = localStorage.getItem("token") || "";
         let config = {
             method: "get",
@@ -98,7 +98,7 @@ export default function Category() {
     };
 
     useEffect(() => {
-        fectchData();
+        fetchData();
     }, [])
     return (
         <main className="min-h-screen max-w-screen pt-2 px-4">

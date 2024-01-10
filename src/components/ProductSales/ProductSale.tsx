@@ -1,20 +1,22 @@
 'use client';
 
 import Image from "next/image";
+import bg1 from "@/styles/images/bg1.png"
 
-export default function ProductSale(){
+export default function ProductSale({name, price, image, onClick} : any){
     return(
         <>
-            <div className=" justify-between items-center text-center w-24 h-24 bg-primary shadow-gray-500 shadow-md">
+            <div onClick={onClick} className=" justify-between items-center text-center m-2 w-28 h-32 bg-primary shadow-gray-500 shadow-md">
                 <Image
                     priority
                     className=" "
-                    src="/images/bg1.png"
+                    src={image || bg1}
                     height={80}
-                    width={100}
-                    alt=""
+                    width={120}
+                    alt="Product"
                 />
-                <p className=" text-white">Product</p>
+                <p className=" text-white text-sm">{name}</p>
+                <p className=" text-white text-sm">{price}</p>
             </div>
         </>
     )
