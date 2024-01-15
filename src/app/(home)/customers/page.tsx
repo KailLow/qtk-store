@@ -12,7 +12,7 @@ import { title } from "process";
 import axios from 'axios';
 import DataTable from "@/components/Table/Table";
 import API from "@/constants/apiEndpoint";
-import Customer, { createCustomer } from "@/types/entity/Customer";
+import Customer, { Gender, createCustomer } from "@/types/entity/Customer";
 import viewCustomerList from "@/api/Customers/viewAllCustomers";
 import { data } from "autoprefixer";
 import UpdateCustomerFormModal from "@/components/CustomerForm/UpdateModal";
@@ -72,14 +72,16 @@ export default function Customers() {
 
     const res = await axios.request(config);
 
-    const staffs = res.data.results as Customer[];
-    const newCustomers = staffs.map((data) =>
+    const staffs = res.data.results ;
+    const newCustomers = staffs.map((data: { name: string; phone: string; email: string; gender: Gender; address: { province: string; district: string; ward: string; }; birthDate: string; active: boolean; id: string; }) =>
       createCustomer(
         data.name,
         data.phone,
         data.email,
         data.gender,
-        data.address,
+        data.address.province,
+        data.address.district,
+        data.address.ward,
         data.birthDate,
         data.active,
         data.id
@@ -129,8 +131,8 @@ export default function Customers() {
               title: "Email",
               className: " font-normal text-secondary-500",
             },
-            birthDate: {
-              title: "Other",
+            address: {
+              title: "Address",
             },
           }}
         />

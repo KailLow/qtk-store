@@ -3,7 +3,8 @@ import BaseEntity from "./BaseEntity";
 export default interface Category extends BaseEntity {
     [x: string]: any;
     name: string;
-    productIds: string[]
+    productIds: string[];
+    productQty: number;
 }
 
 export function createCategory(
@@ -11,10 +12,12 @@ export function createCategory(
     id: string,
     productIds: string[] = ['']
   ): Category {
+    const productQty = productIds.length;
     const customer: Category = {
         name,
         id,
-        productIds
+        productIds,
+        productQty,
     };
     return customer;
 }

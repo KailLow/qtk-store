@@ -1,4 +1,3 @@
-// const BASE_API = "http://localhost:8080";
 const BASE_API = "http://103.57.221.113:3000/v1/";
 
 const API = {
@@ -8,6 +7,10 @@ const API = {
         customers: `${BASE_API}/customers`,
         supplier: `${BASE_API}/suppliers`,
         category: `${BASE_API}/categories`,
+        product: `${BASE_API}/products`,
+        users: `${BASE_API}/users/`,
+        inventory: `${BASE_API}/inventories`,
+        invoices: `${BASE_API}/invoices`
     },
 };
 

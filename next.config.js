@@ -1,5 +1,13 @@
 /** @type {import('next').NextConfig} */
 require('dotenv').config();
-const nextConfig = {}
+const nextConfig = {
+    images: {
+        domains: [
+          'cdn.popsww.com',
+          'drive.google.com',
+          'cdn.tgdd.vn',
+        ],
+      },
+}
 
 module.exports = nextConfig

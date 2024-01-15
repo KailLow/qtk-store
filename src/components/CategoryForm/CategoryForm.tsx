@@ -19,7 +19,6 @@ export default function CategoryForm({onCloseModal} : any){
     var raw = JSON.stringify({
       "name": name,
     });
-    console.log(raw);
 
     var requestOptions = {
       method: 'POST',

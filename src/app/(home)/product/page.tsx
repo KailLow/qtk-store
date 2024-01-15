@@ -2,23 +2,26 @@
 
 import SearchInput from "@/components/SearchInput";
 import Topbar from "@/components/Topbar";
-import { Button } from "flowbite-react";
-import { HiPlus } from 'react-icons/hi';
+import { Button, Select } from "flowbite-react";
+import { HiPlus, HiFilter } from 'react-icons/hi';
 import React, { useEffect, useState } from "react";
-import CategoryFormModal from "@/components/CategoryForm/CategoryFormModal";
+import ProductFormModal from "@/components/ProductForm/ProductFormModal";
 import axios from 'axios';
 import DataTable from "@/components/Table/Table";
 import { useRouter } from 'next/navigation';
 import API from "@/constants/apiEndpoint";
 import { useClaimModal } from "@/components/ClaimModal/ClaimModal";
-import Category, { createCategory } from "@/types/entity/Category";
+import Product, { Quantity, createProduct } from "@/types/entity/Product";
 import PaginationCustom from '@/components/Pagination/Pagination'
 import { error } from "console";
 import UpdateCategoryFormModal from "@/components/CategoryForm/UpdateModal";
+import Category from "@/types/entity/Category";
+import Supplier from "@/types/entity/Supplier";
+import FORMATTER from "@/utils/formatter";
 //import CustomerForm from "@/components/CustomerForm/CustomerForm";
 
-export default function Category() {
-    const [category, setCategory] = useState<Category[]>([]);
+export default function Product() {
+    const [product, setProduct] = useState<Product[]>([]);
     //const tokenStr = localStorage.getItem("token") || "";
     let tmp;
     const [number, setNumber] = useState(1);
@@ -28,6 +31,7 @@ export default function Category() {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [categoryId, setCategoryId] = useState('');
     const [categoryName, setCategoryName] = useState('');
+    const [sort, setSort] = useState('name');
 
     const onPageChange = (page: number) => {
         setCurrentPage(page);
@@ -68,7 +72,7 @@ export default function Category() {
         let config = {
             method: "get",
             maxBodyLength: Infinity,
-            url: `${API.authentication.category}?limit=10&page=${currentPage}&sortBy=name`,
+            url: `${API.authentication.product}?limit=10&page=${currentPage}&sortBy=${sort}`,
             headers: {
                 Authorization: "Bearer " + tokenStr,
             },
@@ -80,18 +84,26 @@ export default function Category() {
 
             if (res.status == 401)
                 console.log("aaaaaa");
-            const category = res.data.results as Category[];
+            const products = res.data.results;
             setNumber(res.data.totalPages);
-            const newCategory = category.map((data) =>
-                createCategory(
-                    data.name,
-                    data.id,
-                    data.productIds
+            console.log(products);
+            const newProduct = products.map((data : { name: string, id: string, description: string, unit: string, images: string, price: number, categories: Category, supplier: Supplier, quantity: Quantity}) =>
+            createProduct(
+                data.name,
+                data.id,
+                data.description,
+                data.unit,
+                data.images,
+                data.price,
+                data.categories,
+                data.supplier,
+                data.quantity
                 )
             );
 
-            setCategory(newCategory);
-            return category;
+            setProduct(newProduct);
+            console.log(newProduct)
+            return products;
         } catch (error) {
             console.log(error);
         }
@@ -106,17 +118,26 @@ export default function Category() {
                 <Topbar title="Product" />
                 <div className=" flex w-full my-2 justify-between">
                     <SearchInput />
-
+                    <Select icon={HiFilter} onChange={(e) => {
+                        setSort((e.target.value).toLowerCase());
+                        fectchData();
+                        }} 
+                        required
+                    >
+                        <option>Name</option>
+                        <option>Price</option>
+                        <option>Supplier</option>
+                        <option>Category</option>
+                    </Select>
                     <Button onClick={handleButtonClick} className=" bg-primary rounded shadow-xl">
                         <HiPlus className="mr-2 h-5 w-5" />
-                        Add Category
+                        Add Product
                     </Button>
                 </div>
 
-                <CategoryFormModal openModal={openModal} onCloseModal={handleCloseForm} />
-                <UpdateCategoryFormModal openModal={openUpdateModal} onCloseModal={handleCloseForm} categoryName={categoryName} categoryID={categoryId} />
+                <ProductFormModal openModal={openModal} onCloseModal={handleCloseForm} />
                 <DataTable
-                    data={category || []}
+                    data={product || []}
                     isLoading={false}
                     onDelete={(category) => {
                         const confirmation = window.confirm("Bạn có chắc chắn muốn xóa nhà cung cấp này?");
@@ -132,7 +153,19 @@ export default function Category() {
                     }}
                     pick={{
                         name: { title: "Name" },
-
+                        price: { 
+                            title: "Price",
+                            className: " font-normal text-secondary-500",
+                            mapper: FORMATTER.toCurrency,
+    
+                        },
+                        unit: {
+                            title: "Unit",
+                            className: " font-normal text-secondary-500"
+                        },
+                        description: { title: "Description"},
+                        supplier: {title: "Supplier"},
+                        category: {title: "Category"}
                     }}
                 />
                 <PaginationCustom number={number} currentPage={currentPage} onPageChange={onPageChange} />
