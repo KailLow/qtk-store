@@ -61,7 +61,7 @@ export default function SupplierForm({onCloseModal} : any){
             </div>
             <div className=' items-center px-3'>
                 <Label className=' mb-2 block' htmlFor='tax1' value='Supplier Tax Identification Number' />
-                <TextInput id='tax' type='text' placeholder='Supplier Tax Identification Number' onChange={(e : any) => setTax(e.target.value)} required />
+                <TextInput pattern="[0-9]*" id='tax' type='text' placeholder='Supplier Tax Identification Number' onChange={(e : any) => setTax(e.target.value)} required />
             </div>
         <div className=' flex'>
             <div className=' w-1/2 justify-between items-center mb-2 px-3'>

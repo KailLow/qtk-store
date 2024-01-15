@@ -31,8 +31,8 @@ export default function Sibebar() {
           <Sidebar.Item href="/category" icon={FaProductHunt}>
             Category Management
           </Sidebar.Item>
-          <Sidebar.Item href="#" icon={FaFileInvoice}>
-            Hóa đơn
+          <Sidebar.Item href="/invoices" icon={FaFileInvoice}>
+            Invoices
           </Sidebar.Item>
           <Sidebar.Item href="/inventory" icon={HiShoppingBag}>
             Inventory

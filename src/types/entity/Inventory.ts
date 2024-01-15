@@ -20,9 +20,10 @@ export function createInventory(
     id: string,
     status: string,
     products: Products[],
-    expiryDate: string,
+    expiryDay: string,
     totalImportPrice: number = 0,
   ): Inventory {
+    const expiryDate = expiryDay.slice(0,10);
     const product: Inventory = {
         name,
         id,

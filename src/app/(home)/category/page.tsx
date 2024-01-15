@@ -91,6 +91,7 @@ export default function Category() {
             );
 
             setCategory(newCategory);
+            console.log(category);
             return category;
         } catch (error) {
             console.log(error);
@@ -132,6 +133,7 @@ export default function Category() {
                     }}
                     pick={{
                         name: { title: "Name" },
+                        productQty: {title: "Product quantity"}
 
                     }}
                 />

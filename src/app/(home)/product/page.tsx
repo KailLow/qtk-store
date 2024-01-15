@@ -17,6 +17,7 @@ import { error } from "console";
 import UpdateCategoryFormModal from "@/components/CategoryForm/UpdateModal";
 import Category from "@/types/entity/Category";
 import Supplier from "@/types/entity/Supplier";
+import FORMATTER from "@/utils/formatter";
 //import CustomerForm from "@/components/CustomerForm/CustomerForm";
 
 export default function Product() {
@@ -154,7 +155,9 @@ export default function Product() {
                         name: { title: "Name" },
                         price: { 
                             title: "Price",
-                            className: " font-normal text-secondary-500"
+                            className: " font-normal text-secondary-500",
+                            mapper: FORMATTER.toCurrency,
+    
                         },
                         unit: {
                             title: "Unit",

@@ -10,7 +10,7 @@ export default function ProductSale({name, price, image, onClick} : any){
                 <Image
                     priority
                     className=" "
-                    src={image || bg1}
+                    src={image}
                     height={80}
                     width={120}
                     alt="Product"

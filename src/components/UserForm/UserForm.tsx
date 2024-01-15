@@ -58,8 +58,8 @@ export default function UserForm({ onCloseModal }: any) {
         <TextInput id='email' type='text' placeholder='User Email' onChange={(e: any) => setEmail(e.target.value)} required />
       </div>
       <div className=' items-center px-3'>
-        <Label className=' mb-2 block' htmlFor='name1' value='User Email' />
-        <TextInput id='password' type='text' placeholder='User Password' onChange={(e: any) => setPassword(e.target.value)} required />
+        <Label className=' mb-2 block' htmlFor='name1' value='User Password' />
+        <TextInput id='password' type='password' placeholder='User Password' onChange={(e: any) => setPassword(e.target.value)} required />
       </div>
       {/* <div className=' items-center px-3'>
         <Label className=' mb-2 block' htmlFor='name1' value='Role' />

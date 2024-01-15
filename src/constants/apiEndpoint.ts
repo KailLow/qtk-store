@@ -10,6 +10,7 @@ const API = {
         product: `${BASE_API}/products`,
         users: `${BASE_API}/users/`,
         inventory: `${BASE_API}/inventories`,
+        invoices: `${BASE_API}/invoices`
     },
 };
 

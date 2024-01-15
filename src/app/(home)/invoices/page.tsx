@@ -16,27 +16,28 @@ import { usePathname, useRouter } from "next/navigation";
 import Supplier from "@/types/entity/Supplier";
 import { data } from "autoprefixer";
 import InventoryTable from "@/components/Table/InventoryTable";
+import Invoices, { createInvoice } from "@/types/entity/Invoices";
 //import CustomerForm from "@/components/CustomerForm/CustomerForm";
 
-export default function Inventories() {
+export default function Invoices() {
     const [inventory, setInventory] = useState<Inventory[]>([]);
-    const [sell, setSell] = useState<Product[]>([])
+    const [invoices, setInvoices] = useState<Invoices[]>([])
     //const tokenStr = localStorage.getItem("token") || "";
     let tmp;
     const router = useRouter();
     const currentPath = usePathname();
     const [number, setNumber] = useState(1);
 
-    const changeStatus = async (id: string) => {
+    const changeStatus = async (id: string, status: string) => {
         const tokenStr = localStorage.getItem("token") || "";
         let data = JSON.stringify({
-            "status": "completed"
+            "status": status,
           });
           
           let config = {
             method: 'patch',
             maxBodyLength: Infinity,
-            url: `${API.authentication.inventory}/import-products/${id}/status`,
+            url: `${API.authentication.invoices}/${id}/update-status`,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + tokenStr,
@@ -55,35 +56,29 @@ export default function Inventories() {
 
     const fectchData = async () => {
         const tokenStr = localStorage.getItem("token") || "";
-        let config = {
+
+          let config = {
             method: "get",
             maxBodyLength: Infinity,
-            url: `${API.authentication.inventory}/import-products`,
+            url: `${API.authentication.invoices}/`,
             headers: {
-                Authorization: "Bearer " + tokenStr,
+                    'Authorization': "Bearer " + tokenStr,
             },
         };
 
         try {
             const res = await axios.request(config);
-            console.log(res);
+            const invoice = res.data.results;
+            const newArr = invoice.map((data : any) => 
+                createInvoice(data.id, data.status, data.items, data.customer, data.dateIssued, data.totalAmount)
+            )
 
-            if (res.status == 401)
-                console.log("aaaaaa");
-            const products = res.data.results;
-            setNumber(res.data.totalPages);
-            console.log(products);
-            const newArr = products.map((data : any) => (
-                createInventory(data.createdBy.name, data.id, data.status, data.products, data.products[0].receivedDate, data.totalImportPrice)
-            ))
-
-            setInventory(newArr);
-            console.log(newArr)
-            return products;
+            console.log(newArr);
+            setInvoices(newArr)
         } catch (error) {
             console.log(error);
         }
-    };
+    }
 
     useEffect(() => {
         fectchData();
@@ -91,25 +86,23 @@ export default function Inventories() {
     return (
         <main className="min-h-screen max-w-screen pt-2 px-4">
             <div className=" flex-col w-full">
-                <Topbar title="Inventory" />
+                <Topbar title="Invoices" />
                 <div className=" flex w-full my-2 justify-between">
                     <SearchInput />
-
-                    <Button onClick={() => router.push(`${currentPath}/create_import_bill`)} className=" bg-primary rounded shadow-xl">
-                        <HiPlus className="mr-2 h-5 w-5" />
-                        Import Product
-                    </Button>
                 </div>
 
                 <div className=" h-full flex-row-reverse">
                 <InventoryTable
-                    data={inventory || []}
+                    data={invoices || []}
                     isLoading={false}
-                    onEdit={(inventor) => changeStatus(inventor.id)}
+                    onEdit={(invoice) => changeStatus(invoice.id, "paid")}
+                    onDelete={(invoice) => changeStatus(invoice.id, "cancelled")}
                     pick={{
-                        name: { title: "Staff" },
-                        expiryDate: { title: "Expriry Date" },
-                        totalImportPrice: {
+                        invoicesId: {
+                            title: "Invoice ID"
+                        },
+                        dateIssued: { title: "Date" },
+                        totalAmount: {
                             title: "Total Import Price",
                             mapper: FORMATTER.toCurrency,
                         },
@@ -120,6 +113,8 @@ export default function Inventories() {
                     }}
                 />
                 </div>
+
+                
                 
             </div>
         </main>

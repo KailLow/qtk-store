@@ -8,6 +8,8 @@ import { publicFetcher } from "@/hooks/usePublicRoute";
 import TokenContext from "../../contexts/TokenContext";
 import { useRouter } from 'next/navigation';
 import API from "@/constants/apiEndpoint";
+import { Toast } from "flowbite-react";
+import CustomToast from "@/components/Toast";
 
 
 export default function SignIn() {
@@ -19,6 +21,7 @@ export default function SignIn() {
     
     const { setToken } = useContext(TokenContext);
     const router = useRouter();
+    const [status, setStatus] = useState(false);
 
     const handleLogin = async () => {
         if (!validateEmail(email) && !validatePassword(password)) {
@@ -58,11 +61,14 @@ export default function SignIn() {
                 })
                 localStorage.setItem("token", token.tokens.access.token);
                 localStorage.setItem("refresh", token.tokens.refresh.token);
+                setStatus(true);
+                setErr('Login Successful');
                 router.push("/sales");
             } else {
                 setEmail('');
                 setPassword('');
                 setErr('Email or password is invalid');
+                setStatus(true);
             }
 
         return;
@@ -138,6 +144,7 @@ export default function SignIn() {
                             name="signIn" id="signIn" type="button"onClick={handleLogin}
                         >Sign In</button>
                 </form>
+                {status? (<CustomToast status={false} title={err} />) : (<></>)}
             </div>
         </div>
     );  

@@ -19,6 +19,7 @@ const ImageInput: React.FC = () => {
 
       const formdata = new FormData();
       formdata.append('file', selectedFile, selectedFile.name);
+      console.log(formdata);
 
       const requestOptions: RequestInit = {
         method: 'POST',
